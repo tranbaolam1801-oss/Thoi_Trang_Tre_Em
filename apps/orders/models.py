@@ -1,33 +1,23 @@
 from django.db import models
-from apps.users.models import KhachHang
-from apps.products.models import SanPhamChiTiet
+from apps.products.models import Product
 
 
-class HoaDonBan(models.Model):
+class DonHang(models.Model):
 
-    mahdb = models.CharField(max_length=10, primary_key=True)
+    customer_name = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    makh = models.ForeignKey(KhachHang, on_delete=models.CASCADE)
-
-    ngaygio = models.DateTimeField()
-
-    tongtien = models.DecimalField(max_digits=12, decimal_places=2)
-
-    class Meta:
-        db_table = "HDBAN"
+    def __str__(self):
+        return self.customer_name
 
 
-class ChiTietHoaDon(models.Model):
+class ChiTietDonHang(models.Model):
 
-    mahdb = models.ForeignKey(HoaDonBan, on_delete=models.CASCADE)
+    order = models.ForeignKey(DonHang, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-    maspct = models.ForeignKey(SanPhamChiTiet, on_delete=models.CASCADE)
+    so_luong = models.IntegerField()
+    gia = models.DecimalField(max_digits=10, decimal_places=2)
 
-    soluong = models.IntegerField()
-
-    dongiaban = models.DecimalField(max_digits=12, decimal_places=2)
-
-    thanhtien = models.DecimalField(max_digits=12, decimal_places=2)
-
-    class Meta:
-        db_table = "CHITIET_HDBAN"
+    def __str__(self):
+        return f"{self.product.name} - {self.so_luong}"

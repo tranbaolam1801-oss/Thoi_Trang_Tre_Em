@@ -1,9 +1,14 @@
 from pathlib import Path
 
+# ===============================
+# BASE DIRECTORY
+# ===============================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+# ===============================
 # SECURITY
+# ===============================
 SECRET_KEY = 'django-insecure-key'
 
 DEBUG = True
@@ -14,7 +19,6 @@ ALLOWED_HOSTS = []
 # ===============================
 # INSTALLED APPS
 # ===============================
-
 INSTALLED_APPS = [
 
     'django.contrib.admin',
@@ -24,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Apps của project
+    # apps của project
     'apps.products',
     'apps.users',
     'apps.cart',
@@ -39,7 +43,6 @@ INSTALLED_APPS = [
 # ===============================
 # MIDDLEWARE
 # ===============================
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,21 +55,19 @@ MIDDLEWARE = [
 
 
 # ===============================
-# URL
+# URL ROOT
 # ===============================
-
 ROOT_URLCONF = 'shop_project.urls'
 
 
 # ===============================
 # TEMPLATES
 # ===============================
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
 
-        # thư mục templates của project
+        # thư mục template chung
         'DIRS': [BASE_DIR / 'templates'],
 
         'APP_DIRS': True,
@@ -86,14 +87,12 @@ TEMPLATES = [
 # ===============================
 # WSGI
 # ===============================
-
 WSGI_APPLICATION = 'shop_project.wsgi.application'
 
 
 # ===============================
-# DATABASE SQL SERVER
+# DATABASE (SQL SERVER)
 # ===============================
-
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
@@ -112,7 +111,6 @@ DATABASES = {
 # ===============================
 # PASSWORD VALIDATION
 # ===============================
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -126,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # ===============================
 # LANGUAGE
 # ===============================
-
 LANGUAGE_CODE = 'vi'
 
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
@@ -139,17 +136,16 @@ USE_TZ = True
 # ===============================
 # STATIC FILES
 # ===============================
-
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+
 # ===============================
 # MEDIA FILES
 # ===============================
-
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -158,5 +154,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # ===============================
 # DEFAULT FIELD
 # ===============================
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
