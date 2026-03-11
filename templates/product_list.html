@@ -1,60 +1,27 @@
-!DOCTYPE html>
-<html>
-<head>
-    <title>Shop Thời Trang</title>
+{% extends 'base.html' %}
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="{% static 'js/script.js' %}"></script>
+{% block content %}
 
-</head>
+<h2>Tất cả sản phẩm</h2>
 
-<body>
+<div class="products">
 
-<header>
-    <h1>SHOP THỜI TRANG</h1>
-</header>
+{% for p in products %}
 
-<nav>
-    <a href="/">Trang chủ</a>
-    <a href="/cart/">Giỏ hàng</a>
-    <a href="/orders/">Đơn hàng</a>
-</nav>
+<div class="product">
 
-<div class="container">
+<img src="{{p.image}}" width="200">
 
-    <div class="product-grid">
+<h3>{{p.name}}</h3>
 
-        <div class="product-card">
-            <img src="https://picsum.photos/300/200">
-            <h3>Áo thun nam</h3>
-            <p class="price">200.000đ</p>
-            <button onclick="addToCart('Áo thun nam')">Thêm giỏ</button>
-        </div>
+<p>{{p.price}} VND</p>
 
-        <div class="product-card">
-            <img src="https://picsum.photos/300/201">
-            <h3>Quần jean</h3>
-            <p class="price">350.000đ</p>
-            <button onclick="addToCart('Quần jean')">Thêm giỏ</button>
-        </div>
-
-        <div class="product-card">
-            <img src="https://picsum.photos/300/202">
-            <h3>Áo khoác</h3>
-            <p class="price">500.000đ</p>
-            <button onclick="addToCart('Áo khoác')">Thêm giỏ</button>
-        </div>
-
-        <div class="product-card">
-            <img src="https://picsum.photos/300/203">
-            <h3>Áo hoodie</h3>
-            <p class="price">450.000đ</p>
-            <button onclick="addToCart('Áo hoodie')">Thêm giỏ</button>
-        </div>
-
-    </div>
+<a href="/product/{{p.id}}/">Xem</a>
 
 </div>
 
-</body>
-</html>
+{% endfor %}
+
+</div>
+
+{% endblock %}

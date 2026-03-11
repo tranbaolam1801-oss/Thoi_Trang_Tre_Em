@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+
+<h2>Sản phẩm nổi bật</h2>
+
+<div class="products">
+
+{% for p in products %}
+
+<div class="product">
+
+<img src="{{p.image}}" width="200">
+
+<h3>{{p.name}}</h3>
+
+<p>{{p.price}} VND</p>
+
+<a href="/product/{{p.id}}/">Chi tiết</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

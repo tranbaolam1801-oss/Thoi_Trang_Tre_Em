@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{{product.name}}</h2>
+
+<img src="{{product.image}}" width="300">
+
+<p>{{product.description}}</p>
+
+<h3>{{product.price}} VND</h3>
+
+<button onclick="addToCart('{{product.name}}')">
+Thêm vào giỏ hàng
+</button>
+
+{% endblock %}
