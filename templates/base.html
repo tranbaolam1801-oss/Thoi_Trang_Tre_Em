@@ -1,27 +1,21 @@
-{% load static %}
-
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Shop Thời Trang</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+  <body>
+    <header class="navbar">
+      <div class="logo">SHOP</div>
 
-<body>
+      <div class="search">
+        <input type="text" placeholder="Tìm sản phẩm..." />
+      </div>
 
-<div class="header">
-    <h1>SHOP THỜI TRANG</h1>
-    <a href="/">Trang chủ</a>
-    <a href="/products/">Sản phẩm</a>
-</div>
+      <div class="cart">🛒 Giỏ hàng</div>
+    </header>
 
-<div class="container">
-{% block content %}
-{% endblock %}
-</div>
-
-<script src="{% static 'js/script.js' %}"></script>
-
-</body>
+    <div class="container">{% block content %} {% endblock %}</div>
+  </body>
 </html>

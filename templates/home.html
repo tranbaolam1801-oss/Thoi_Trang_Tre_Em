@@ -1,27 +1,21 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <h2>Sản phẩm nổi bật</h2>
 
-<div class="products">
+<div class="product-grid">
+  {% for product in products %}
 
-{% for p in products %}
+  <div class="product-card">
+    <img src="{{product.image}}" />
 
-<div class="product">
+    <h3>{{product.name}}</h3>
 
-<img src="{{p.image}}" width="200">
+    <p class="price">{{product.price}} VND</p>
 
-<h3>{{p.name}}</h3>
+    <button>Thêm vào giỏ</button>
+  </div>
 
-<p>{{p.price}} VND</p>
-
-<a href="/product/{{p.id}}/">Chi tiết</a>
-
-</div>
-
-{% endfor %}
-
+  {% endfor %}
 </div>
 
 {% endblock %}
