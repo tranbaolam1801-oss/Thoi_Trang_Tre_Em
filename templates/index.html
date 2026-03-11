@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shop Thời Trang</title>
+</head>
+<body>
+
+<h1>Danh sách sản phẩm</h1>
+
+{% for product in products %}
+<div>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.price }} VNĐ</p>
+    <img src="{{ product.image }}" width="150">
+</div>
+{% endfor %}
+
+</body>
+</html>

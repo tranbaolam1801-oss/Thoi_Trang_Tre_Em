@@ -1,11 +1,9 @@
 from django.db import models
-from apps.products.models import SanPham
+from apps.products.models import Product
 
-
-class Kho(models.Model):
-    san_pham = models.ForeignKey(SanPham, on_delete=models.CASCADE)
-    so_luong = models.IntegerField()
-    ngay_cap_nhat = models.DateTimeField(auto_now=True)
+class Inventory(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 
     def __str__(self):
-        return f"{self.san_pham.ten} - {self.so_luong}"
+        return f"{self.product.name} - {self.quantity}"
