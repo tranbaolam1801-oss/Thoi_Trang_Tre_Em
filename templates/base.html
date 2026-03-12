@@ -1,21 +1,106 @@
+{% load static %}
 <!doctype html>
-<html>
+<html lang="vi" class="scroll-smooth">
   <head>
-    <title>Shop Thời Trang</title>
-    <link rel="stylesheet" href="/static/css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Thời Trang Trẻ Em{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <!-- nếu bạn có file css riêng -->
+    {% block extra_head %}{% endblock %}
   </head>
-
-  <body>
-    <header class="navbar">
-      <div class="logo">SHOP</div>
-
-      <div class="search">
-        <input type="text" placeholder="Tìm sản phẩm..." />
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-[#EE4D2D] text-white sticky top-0 z-50 shadow-md">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+        <a
+          href="{% url 'home' %}"
+          class="text-2xl font-bold flex items-center gap-2"
+        >
+          <i class="fas fa-baby text-yellow-300"></i> Thời Trang Trẻ Em
+        </a>
+        <div class="flex-1 relative hidden md:block">
+          <input
+            type="text"
+            placeholder="Tìm áo thun, váy công chúa, giày bé..."
+            class="w-full py-3 px-5 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-yellow-300"
+          />
+          <button
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-[#EE4D2D] bg-white p-2 rounded-full"
+          >
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="{% url 'cart' %}" class="relative">
+            <i class="fas fa-shopping-cart text-2xl"></i>
+            <span
+              id="cart-count"
+              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full font-bold"
+              >0</span
+            >
+          </a>
+          <a href="{% url 'login' %}"
+            ><i class="fas fa-user-circle text-2xl"></i
+          ></a>
+        </div>
       </div>
-
-      <div class="cart">🛒 Giỏ hàng</div>
     </header>
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 py-3">
+      {% for message in messages %}
+      <div
+        class="p-4 mb-4 text-sm rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800 {% elif message.tags == 'error' %}bg-red-100 text-red-800 {% else %}bg-blue-100 text-blue-800{% endif %}"
+      >
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
-    <div class="container">{% block content %} {% endblock %}</div>
+    <!-- Main content -->
+    <main class="flex-1 pb-20 md:pb-0">{% block content %}{% endblock %}</main>
+
+    <!-- Bottom Navigation (mobile) -->
+    <nav
+      class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 py-2 flex justify-around items-center text-gray-600"
+      >
+        <a
+          href="{% url 'home' %}"
+          class="flex flex-col items-center text-[#EE4D2D]"
+        >
+          <i class="fas fa-home text-2xl"></i>
+          <span class="text-xs">Trang chủ</span>
+        </a>
+        <a href="#" class="flex flex-col items-center">
+          <i class="fas fa-th-large text-2xl"></i>
+          <span class="text-xs">Danh mục</span>
+        </a>
+        <a href="{% url 'cart' %}" class="flex flex-col items-center relative">
+          <i class="fas fa-shopping-bag text-2xl"></i>
+          <span class="text-xs">Giỏ hàng</span>
+        </a>
+        <a href="{% url 'login' %}" class="flex flex-col items-center">
+          <i class="fas fa-user text-2xl"></i>
+          <span class="text-xs">Tài khoản</span>
+        </a>
+      </div>
+    </nav>
+
+    {% block extra_js %}{% endblock %}
+
+    <div
+      id="toast"
+      class="fixed bottom-4 right-4 z-50 hidden rounded-lg bg-black/80 text-white px-4 py-3 shadow-lg"
+    ></div>
+    <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>

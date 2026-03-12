@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block title %}Thanh toán - Thời Trang Trẻ Em{%
+endblock %} {% block content %}
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-4">Xác nhận thanh toán</h2>
+
+  <!-- Tóm tắt đơn hàng -->
+  <div class="bg-white p-4 rounded-lg shadow mb-6">
+    <h3 class="font-bold mb-3">Đơn hàng của bạn</h3>
+    {% for item in cart_items %}
+    <div class="flex justify-between py-2 border-b">
+      <span>{{ item.product.name }} x {{ item.quantity }}</span>
+      <span>{{ item.subtotal|floatformat:0 }}đ</span>
+    </div>
+    {% endfor %}
+    <div class="flex justify-between font-bold mt-4 text-lg">
+      <span>Tổng cộng:</span>
+      <span class="text-[#EE4D2D]">{{ total|floatformat:0 }}đ</span>
+    </div>
+  </div>
+
+  <!-- Thông tin giao hàng -->
+  <div class="bg-white p-4 rounded-lg shadow mb-6">
+    <h3 class="font-bold mb-3">Thông tin giao hàng</h3>
+    <input
+      type="text"
+      placeholder="Họ và tên"
+      class="w-full p-3 border rounded mb-3"
+    />
+    <input
+      type="text"
+      placeholder="Số điện thoại"
+      class="w-full p-3 border rounded mb-3"
+    />
+    <input
+      type="text"
+      placeholder="Địa chỉ nhận hàng"
+      class="w-full p-3 border rounded"
+    />
+  </div>
+
+  <!-- Phương thức thanh toán -->
+  <div class="bg-white p-4 rounded-lg shadow mb-6">
+    <h3 class="font-bold mb-3">Phương thức thanh toán</h3>
+    <label class="flex items-center gap-3 py-3 border-b">
+      <input type="radio" name="payment" checked />
+      <span>Thanh toán khi nhận hàng (COD)</span>
+    </label>
+    <label class="flex items-center gap-3 py-3">
+      <input type="radio" name="payment" />
+      <span>Chuyển khoản ngân hàng</span>
+    </label>
+  </div>
+
+  <button
+    class="w-full bg-[#EE4D2D] text-white py-4 rounded-lg font-bold text-lg shadow-lg"
+  >
+    Đặt hàng ngay
+  </button>
+</div>
+{% endblock %}

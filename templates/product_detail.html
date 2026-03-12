@@ -1,17 +1,71 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %}{{ product.name }} - Thời Trang Trẻ
+Em{% endblock %} {% block content %}
+<div class="bg-white">
+  <div class="p-4">
+    <!-- Ảnh lớn -->
+    <img
+      src="{{ product.image }}"
+      alt="{{ product.name }}"
+      class="w-full h-96 object-contain"
+    />
 
-{% block content %}
+    <h1 class="text-xl font-bold mt-4">{{ product.name }}</h1>
+    <div class="flex items-center gap-3 mt-2">
+      <span class="text-2xl font-bold text-[#EE4D2D]"
+        >{{ product.price|floatformat:0 }}đ</span
+      >
+      {% if product.old_price %}
+      <span class="text-lg text-gray-500 line-through"
+        >{{ product.old_price|floatformat:0 }}đ</span
+      >
+      <span class="bg-red-600 text-white text-xs px-2 py-1 rounded"
+        >GIẢM {{ product.discount }}%</span
+      >
+      {% endif %}
+    </div>
+    <p class="text-sm text-gray-600 mt-1">
+      Đã bán {{ product.sold|default:456 }} | ⭐ 4.8 ({{
+      product.reviews|default:120 }} đánh giá)
+    </p>
 
-<h2>{{product.name}}</h2>
+    <!-- Size & Màu -->
+    <div class="mt-6">
+      <p class="font-medium">Size</p>
+      <div class="flex gap-2 mt-2">
+        <button
+          class="border border-gray-300 px-4 py-2 rounded hover:bg-[#EE4D2D] hover:text-white"
+        >
+          S
+        </button>
+        <button
+          class="border border-gray-300 px-4 py-2 rounded bg-[#EE4D2D] text-white"
+        >
+          M
+        </button>
+        <button
+          class="border border-gray-300 px-4 py-2 rounded hover:bg-[#EE4D2D] hover:text-white"
+        >
+          L
+        </button>
+      </div>
+    </div>
 
-<img src="{{product.image}}" width="300">
+    <button
+      onclick="addToCart('{{ product.id }}', '{{ product.name|escapejs }}')"
+      class="w-full mt-8 bg-[#EE4D2D] text-white py-4 rounded-lg font-bold text-lg shadow-lg hover:bg-[#d43c1f]"
+    >
+      Thêm vào giỏ hàng
+    </button>
+    <button
+      class="w-full mt-3 bg-gray-200 text-gray-800 py-4 rounded-lg font-bold"
+    >
+      Mua ngay
+    </button>
 
-<p>{{product.description}}</p>
-
-<h3>{{product.price}} VND</h3>
-
-<button onclick="addToCart('{{product.name}}')">
-Thêm vào giỏ hàng
-</button>
-
+    <div class="mt-8">
+      <h3 class="font-bold">Mô tả sản phẩm</h3>
+      <p class="mt-2 text-gray-700">{{ product.description|linebreaks }}</p>
+    </div>
+  </div>
+</div>
 {% endblock %}

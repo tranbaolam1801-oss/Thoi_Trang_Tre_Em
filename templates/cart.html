@@ -1,47 +1,42 @@
-{% extends "base.html" %}
+{% extends 'base.html' %} {% block title %}Giỏ hàng - Thời Trang Trẻ Em{%
+endblock %} {% block content %}
+<div class="p-4 bg-white">
+  <h2 class="text-xl font-bold mb-4">Giỏ hàng của bạn</h2>
 
-{% block content %}
+  {% for item in cart_items %}
+  <div class="flex gap-4 border-b py-4">
+    <img
+      src="{{ item.product.image }}"
+      alt=""
+      class="w-24 h-24 object-cover rounded"
+    />
+    <div class="flex-1">
+      <h4 class="font-medium">{{ item.product.name }}</h4>
+      <p class="text-[#EE4D2D] font-bold mt-1">
+        {{ item.product.price|floatformat:0 }}đ x {{ item.quantity }}
+      </p>
+      <div class="flex items-center gap-3 mt-2">
+        <button class="w-8 h-8 border rounded">-</button>
+        <span>{{ item.quantity }}</span>
+        <button class="w-8 h-8 border rounded">+</button>
+        <button class="text-red-600 text-sm ml-4">Xóa</button>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-center py-10 text-gray-500">Giỏ hàng trống</p>
+  {% endfor %}
 
-<h2>Giỏ hàng</h2>
-
-<table border="1">
-
-<tr>
-<th>Tên sản phẩm</th>
-<th>Số lượng</th>
-<th>Action</th>
-</tr>
-
-{% for item in products %}
-
-<tr>
-
-<td>{{item.product.masp.tensp}}</td>
-
-<td>
-
-<form method="post" action="/cart/update/{{item.product.maspct}}/">
-
-{% csrf_token %}
-
-<input type="number" name="quantity" value="{{item.quantity}}">
-
-<button type="submit">Update</button>
-
-</form>
-
-</td>
-
-<td>
-
-<a href="/cart/remove/{{item.product.maspct}}/">Xóa</a>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
+  <div class="mt-6 p-4 bg-gray-100 rounded-lg">
+    <div class="flex justify-between text-lg font-bold">
+      <span>Tổng tiền:</span>
+      <span class="text-[#EE4D2D]">{{ total|floatformat:0 }}đ</span>
+    </div>
+    <button
+      class="w-full mt-6 bg-[#EE4D2D] text-white py-4 rounded-lg font-bold text-lg"
+    >
+      Thanh toán
+    </button>
+  </div>
+</div>
 {% endblock %}

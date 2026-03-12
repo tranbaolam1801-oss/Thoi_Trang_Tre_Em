@@ -1,60 +1,60 @@
 import uuid
 from django.shortcuts import redirect
-from .models import HoaDonBan, ChiTietHoaDon
-from apps.products.models import SanPhamChiTiet
+from django.urls import reverse
+from .models import DonHang, ChiTietDonHang
+from apps.products.models import SanPham
+from apps.users.models import KhachHang
 
 
 def checkout(request):
-
     cart = request.session.get("cart", {})
+    if not cart:
+        return redirect(reverse("products"))
 
     mahdb = str(uuid.uuid4())[:10]
 
-    hoadon = HoaDonBan.objects.create(
+    # Try to associate with a customer record if available
+    kh = None
+    try:
+        kh = KhachHang.objects.get(makh="KH001")
+    except KhachHang.DoesNotExist:
+        kh = None
+
+    hoadon = DonHang.objects.create(
         mahdb=mahdb,
-        makh_id="KH001",
-        tongtien=0
+        makh=kh,
+        tongtien=0,
     )
 
     tongtien = 0
 
     for product_id, item in cart.items():
+        try:
+            product = SanPham.objects.get(pk=product_id)
+        except SanPham.DoesNotExist:
+            continue
 
-        product = SanPhamChiTiet.objects.get(pk=product_id)
-
-        quantity = item["quantity"]
-
-        price = 100000
-
+        quantity = int(item.get("quantity", 0))
+        price = product.price or 0
         thanhtien = price * quantity
 
-        ChiTietHoaDon.objects.create(
+        ChiTietDonHang.objects.create(
             mahdb=hoadon,
             maspct=product,
             soluong=quantity,
             dongiaban=price,
-            thanhtien=thanhtien
+            thanhtien=thanhtien,
         )
-
-        # trừ tồn kho
-        product.soluongton -= quantity
-        product.save()
 
         tongtien += thanhtien
 
-
-    # cập nhật tổng tiền hóa đơn
     hoadon.tongtien = tongtien
     hoadon.save()
 
+    if kh:
+        kh.diem += int(tongtien / 100000)
+        kh.save()
 
-    # ⭐ CỘNG ĐIỂM TÍCH LŨY (ĐẶT Ở ĐÂY)
-    kh = hoadon.makh
-    kh.diem += int(tongtien / 100000)
-    kh.save()
-
-
-    # xóa giỏ hàng
     request.session["cart"] = {}
 
-    return redirect("/products")
+    return redirect(reverse("products"))

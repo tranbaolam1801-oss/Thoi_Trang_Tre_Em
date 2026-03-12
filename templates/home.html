@@ -1,21 +1,120 @@
-{% extends "base.html" %} {% block content %}
+{% extends 'base.html' %} {% load static %}
+<!-- Quan trọng nếu dùng JS/CSS riêng -->
 
-<h2>Sản phẩm nổi bật</h2>
+{% block title %}Trang chủ - Thời Trang Trẻ Em{% endblock %} {% block content %}
 
-<div class="product-grid">
-  {% for product in products %}
-
-  <div class="product-card">
-    <img src="{{product.image}}" />
-
-    <h3>{{product.name}}</h3>
-
-    <p class="price">{{product.price}} VND</p>
-
-    <button>Thêm vào giỏ</button>
-  </div>
-
-  {% endfor %}
+<!-- Banner Flash Sale -->
+<div
+  class="bg-gradient-to-r from-[#EE4D2D] to-[#FF6633] text-white py-6 px-4 text-center"
+>
+  <h2 class="text-2xl font-bold">SALE UP TO 50% - QUẦN ÁO TRẺ EM SIÊU XINH</h2>
+  <p class="mt-2">
+    Flash Sale kết thúc sau:
+    <span id="countdown" class="font-bold text-2xl" data-remaining="9999"
+      >00:00:00</span
+    >
+  </p>
 </div>
 
+<!-- Danh mục nổi bật (có thể thay # bằng url thực tế sau) -->
+<div class="grid grid-cols-4 gap-2 p-4 bg-white">
+  <a href="{% url 'products' %}?gender=boy" class="text-center">
+    <div
+      class="w-16 h-16 mx-auto bg-pink-100 rounded-full flex items-center justify-center text-3xl"
+    >
+      👦
+    </div>
+    <p class="mt-1 text-sm">Bé trai</p>
+  </a>
+  <a href="{% url 'products' %}?gender=girl" class="text-center">
+    <div
+      class="w-16 h-16 mx-auto bg-pink-100 rounded-full flex items-center justify-center text-3xl"
+    >
+      👧
+    </div>
+    <p class="mt-1 text-sm">Bé gái</p>
+  </a>
+  <a href="{% url 'products' %}?age=0-3" class="text-center">
+    <div
+      class="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-3xl"
+    >
+      0-3
+    </div>
+    <p class="mt-1 text-sm">0-3 tuổi</p>
+  </a>
+  <a href="{% url 'products' %}?age=4-7" class="text-center">
+    <div
+      class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center text-3xl"
+    >
+      4-7
+    </div>
+    <p class="mt-1 text-sm">4-7 tuổi</p>
+  </a>
+</div>
+
+<!-- Sản phẩm gợi ý -->
+<div class="p-4">
+  <h3 class="text-xl font-bold mb-4">Gợi ý hôm nay</h3>
+
+  {% if products %}
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    {% for product in products %}
+    <a
+      href="{% url 'product_detail' product.id %}"
+      class="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition product-card"
+    >
+      <img
+        src="{{ product.image.url }}"
+        alt="{{ product.name }}"
+        class="w-full h-48 object-cover"
+      />
+      <div class="p-2">
+        <h4 class="text-sm font-medium line-clamp-2">{{ product.name }}</h4>
+        <p class="text-[#EE4D2D] font-bold mt-1">
+          {{ product.price|floatformat:0 }}đ
+        </p>
+        {% if product.old_price %}
+        <p class="text-xs text-gray-500 line-through">
+          {{ product.old_price|floatformat:0 }}đ
+        </p>
+        {% endif %}
+        <p class="text-xs text-gray-600">
+          Đã bán {{ product.sold|default:120 }}
+        </p>
+      </div>
+    </a>
+    {% empty %}
+    <p class="col-span-4 text-center text-gray-500 py-10">
+      Chưa có sản phẩm nào
+    </p>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center text-gray-500 py-10">Hiện chưa có sản phẩm gợi ý</p>
+  {% endif %}
+</div>
+
+{% endblock %} {% block extra_js %}
+<script>
+  // Countdown đơn giản (2 giờ ví dụ)
+  function startCountdown() {
+    let timeLeft = 2 * 60 * 60; // 2 giờ tính bằng giây
+
+    const timer = setInterval(() => {
+      const hours = Math.floor(timeLeft / 3600);
+      const minutes = Math.floor((timeLeft % 3600) / 60);
+      const seconds = timeLeft % 60;
+
+      document.getElementById("countdown").textContent =
+        `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        document.getElementById("countdown").textContent = "Hết giờ!";
+      }
+      timeLeft--;
+    }, 1000);
+  }
+  startCountdown();
+</script>
 {% endblock %}

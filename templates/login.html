@@ -1,11 +1,39 @@
-<form method="post">
+{% extends 'base.html' %} {% block title %}Đăng nhập - Thời Trang Trẻ Em{%
+endblock %} {% block content %}
+<div class="max-w-md mx-auto p-6 bg-white mt-10 rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold text-center mb-6">Đăng nhập</h2>
 
-{% csrf_token %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label class="block text-gray-700">Số điện thoại / Email</label>
+      <input
+        type="text"
+        name="username"
+        class="w-full p-3 border rounded mt-1 focus:outline-none focus:border-[#EE4D2D]"
+      />
+    </div>
+    <div class="mb-6">
+      <label class="block text-gray-700">Mật khẩu</label>
+      <input
+        type="password"
+        name="password"
+        class="w-full p-3 border rounded mt-1 focus:outline-none focus:border-[#EE4D2D]"
+      />
+    </div>
+    <button
+      type="submit"
+      class="w-full bg-[#EE4D2D] text-white py-3 rounded-lg font-bold hover:bg-[#d43c1f]"
+    >
+      Đăng nhập
+    </button>
+  </form>
 
-<input name="username">
-
-<input name="password" type="password">
-
-<button>Login</button>
-
-</form>
+  <p class="text-center mt-4 text-gray-600">
+    Chưa có tài khoản?
+    <a href="{% url 'register' %}" class="text-[#EE4D2D] font-medium"
+      >Đăng ký ngay</a
+    >
+  </p>
+</div>
+{% endblock %}
