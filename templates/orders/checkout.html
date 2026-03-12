@@ -1,0 +1,79 @@
+{% extends 'base.html' %} {% block title %}Thanh toán - Shop{% endblock %} {%
+block content %}
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-6">Thanh toán</h1>
+
+  {% if cart_items %}
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Thông tin đơn hàng</h2>
+    <table class="w-full text-left">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2">Sản phẩm</th>
+          <th class="px-4 py-2">Số lượng</th>
+          <th class="px-4 py-2">Tạm tính</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr class="border-b">
+          <td class="px-4 py-2">{{ item.product.name }}</td>
+          <td class="px-4 py-2">{{ item.quantity }}</td>
+          <td class="px-4 py-2">{{ item.line_total|floatformat:0 }}₫</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" class="px-4 py-3 text-right font-semibold">
+            Tổng cộng
+          </td>
+          <td class="px-4 py-3 text-xl font-bold text-[#EE4D2D]">
+            {{ total|floatformat:0 }}₫
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-lg font-semibold mb-4">Thông tin khách hàng</h2>
+    <form action="" method="post" class="space-y-4">
+      {% csrf_token %}
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Họ và tên</label>
+        <input
+          type="text"
+          name="customer_name"
+          required
+          class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE4D2D]"
+        />
+      </div>
+
+      <div class="flex items-center justify-between gap-4">
+        <a
+          href="{% url 'cart' %}"
+          class="inline-flex items-center justify-center px-5 py-3 border border-gray-200 rounded-lg hover:bg-gray-50"
+          >Quay lại giỏ hàng</a
+        >
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center bg-[#EE4D2D] text-white px-8 py-3 rounded-lg hover:bg-[#d43c1f]"
+        >
+          Xác nhận đặt hàng
+        </button>
+      </div>
+    </form>
+  </div>
+  {% else %}
+  <div class="bg-white rounded-lg shadow p-8 text-center">
+    <p class="text-lg">Giỏ hàng của bạn đang trống.</p>
+    <a
+      href="{% url 'products' %}"
+      class="mt-4 inline-block bg-[#EE4D2D] text-white px-6 py-3 rounded-lg hover:bg-[#d43c1f]"
+      >Quay lại mua sắm</a
+    >
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

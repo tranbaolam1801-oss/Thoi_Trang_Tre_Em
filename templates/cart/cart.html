@@ -1,0 +1,100 @@
+{% extends 'base.html' %} {% block title %}Giỏ hàng - Shop{% endblock %} {%
+block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-6">Giỏ hàng của bạn</h1>
+
+  {% if cart_items %}
+  <div class="overflow-x-auto bg-white rounded-lg shadow">
+    <table class="min-w-full text-left">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-4">Sản phẩm</th>
+          <th class="px-6 py-4">Đơn giá</th>
+          <th class="px-6 py-4">Số lượng</th>
+          <th class="px-6 py-4">Tạm tính</th>
+          <th class="px-6 py-4"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr class="border-b">
+          <td class="px-6 py-4 flex items-center gap-4">
+            <img
+              src="{{ item.product.image }}"
+              alt="{{ item.product.name }}"
+              class="w-20 h-20 object-cover rounded"
+            />
+            <div>
+              <a
+                href="{% url 'product_detail' item.product.id %}"
+                class="font-semibold hover:underline"
+                >{{ item.product.name }}</a
+              >
+            </div>
+          </td>
+          <td class="px-6 py-4 text-[#EE4D2D] font-semibold">
+            {{ item.product.price|floatformat:0 }}₫
+          </td>
+          <td class="px-6 py-4">
+            <form
+              action="{% url 'update_cart' item.product.id %}"
+              method="post"
+              class="flex items-center gap-2"
+            >
+              {% csrf_token %}
+              <input
+                type="number"
+                name="quantity"
+                min="1"
+                value="{{ item.quantity }}"
+                class="w-20 px-2 py-1 border border-gray-200 rounded"
+              />
+              <button
+                type="submit"
+                class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cập nhật
+              </button>
+            </form>
+          </td>
+          <td class="px-6 py-4 font-semibold">
+            {{ item.line_total|floatformat:0 }}₫
+          </td>
+          <td class="px-6 py-4">
+            <a
+              href="{% url 'remove_cart' item.product.id %}"
+              class="text-red-600 hover:underline"
+              >Xóa</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="mt-8 flex flex-col md:flex-row items-center justify-between gap-4"
+  >
+    <div class="text-lg font-semibold">
+      Tổng:
+      <span class="text-2xl text-[#EE4D2D]">{{ total|floatformat:0 }}₫</span>
+    </div>
+    <a
+      href="{% url 'checkout' %}"
+      class="inline-flex items-center justify-center bg-[#EE4D2D] text-white px-6 py-3 rounded-lg hover:bg-[#d43c1f]"
+      >Tiến hành thanh toán</a
+    >
+  </div>
+  {% else %}
+  <div class="bg-white rounded-lg shadow p-8 text-center">
+    <p class="text-lg">Giỏ hàng hiện đang trống.</p>
+    <a
+      href="{% url 'products' %}"
+      class="mt-4 inline-block bg-[#EE4D2D] text-white px-6 py-3 rounded-lg hover:bg-[#d43c1f]"
+      >Quay lại mua sắm</a
+    >
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

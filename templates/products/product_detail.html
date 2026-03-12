@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block title %}{{ product.name }} - Shop{% endblock
+%} {% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <img
+        src="{{ product.image }}"
+        alt="{{ product.name }}"
+        class="w-full h-96 object-cover rounded"
+      />
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h1 class="text-3xl font-bold">{{ product.name }}</h1>
+      <div class="flex items-baseline gap-4 mt-4">
+        <span class="text-3xl font-bold text-[#EE4D2D]"
+          >{{ product.price|floatformat:0 }}₫</span
+        >
+        {% if product.stock == 0 %}
+        <span class="text-sm px-3 py-1 rounded-full bg-red-100 text-red-700"
+          >Hết hàng</span
+        >
+        {% endif %}
+      </div>
+
+      <p class="text-gray-600 mt-4">{{ product.description|linebreaks }}</p>
+
+      <div class="mt-6">
+        <form
+          action="{% url 'add_cart' product.id %}"
+          method="post"
+          class="flex flex-col sm:flex-row gap-3"
+        >
+          {% csrf_token %}
+          <input
+            name="quantity"
+            type="number"
+            min="1"
+            value="1"
+            class="w-full sm:w-28 px-4 py-2 border border-gray-200 rounded-lg"
+          />
+          <button
+            type="submit"
+            class="w-full sm:w-auto bg-[#EE4D2D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#d43c1f]"
+          >
+            Thêm vào giỏ hàng
+          </button>
+        </form>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="text-lg font-semibold">Chi tiết sản phẩm</h2>
+        <ul class="mt-2 text-gray-700 space-y-1">
+          <li><strong>Kho hàng:</strong> {{ product.stock }}</li>
+          <li>
+            <strong>Ngày tạo:</strong> {{ product.created_at|date:'d/m/Y' }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

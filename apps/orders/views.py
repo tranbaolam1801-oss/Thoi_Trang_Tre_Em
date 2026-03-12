@@ -1,60 +1,74 @@
-import uuid
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import DonHang, ChiTietDonHang
+from django.contrib import messages
+
+from apps.cart.cart import Cart
 from apps.products.models import SanPham
-from apps.users.models import KhachHang
+from .models import DonHang, ChiTietDonHang
 
 
 def checkout(request):
-    cart = request.session.get("cart", {})
-    if not cart:
-        return redirect(reverse("products"))
+    cart = Cart(request)
+    cart_items = []
+    total = 0
 
-    mahdb = str(uuid.uuid4())[:10]
-
-    # Try to associate with a customer record if available
-    kh = None
-    try:
-        kh = KhachHang.objects.get(makh="KH001")
-    except KhachHang.DoesNotExist:
-        kh = None
-
-    hoadon = DonHang.objects.create(
-        mahdb=mahdb,
-        makh=kh,
-        tongtien=0,
-    )
-
-    tongtien = 0
-
-    for product_id, item in cart.items():
+    for product_id, item in cart.cart.items():
         try:
             product = SanPham.objects.get(pk=product_id)
         except SanPham.DoesNotExist:
             continue
 
-        quantity = int(item.get("quantity", 0))
-        price = product.price or 0
-        thanhtien = price * quantity
+        quantity = item.get("quantity", 0)
+        line_total = product.price * quantity
+        total += line_total
+        cart_items.append({
+            "product": product,
+            "quantity": quantity,
+            "line_total": line_total,
+        })
 
-        ChiTietDonHang.objects.create(
-            mahdb=hoadon,
-            maspct=product,
-            soluong=quantity,
-            dongiaban=price,
-            thanhtien=thanhtien,
-        )
+    if request.method == "POST":
+        customer_name = request.POST.get("customer_name", "").strip()
+        if not customer_name:
+            messages.error(request, "Vui lòng nhập tên khách hàng.")
+            return render(request, "orders/checkout.html", {"cart_items": cart_items, "total": total})
 
-        tongtien += thanhtien
+        if not cart_items:
+            messages.warning(request, "Giỏ hàng đang trống.")
+            return redirect("products")
 
-    hoadon.tongtien = tongtien
-    hoadon.save()
+        order = DonHang.objects.create(customer_name=customer_name, total=0)
+        order_total = 0
 
-    if kh:
-        kh.diem += int(tongtien / 100000)
-        kh.save()
+        for item in cart_items:
+            product = item["product"]
+            quantity = item["quantity"]
 
-    request.session["cart"] = {}
+            if product.stock < quantity:
+                messages.error(
+                    request,
+                    f"Sản phẩm {product.name} chỉ còn {product.stock} trong kho."
+                )
+                return render(request, "orders/checkout.html", {"cart_items": cart_items, "total": total})
 
-    return redirect(reverse("products"))
+            line_total = product.price * quantity
+            order_total += line_total
+
+            ChiTietDonHang.objects.create(
+                order=order,
+                product=product,
+                quantity=quantity,
+                price=product.price,
+            )
+
+            product.stock = max(product.stock - quantity, 0)
+            product.save()
+
+        order.total = order_total
+        order.save()
+
+        cart.clear()
+        messages.success(request, "Đặt hàng thành công! Cảm ơn bạn.")
+        return redirect("products")
+
+    return render(request, "orders/checkout.html", {"cart_items": cart_items, "total": total})

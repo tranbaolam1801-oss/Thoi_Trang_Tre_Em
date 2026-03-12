@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block title %}Sản phẩm - Shop{% endblock %} {%
+block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div
+    class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
+  >
+    <div>
+      <h1 class="text-2xl font-bold">Tất cả sản phẩm</h1>
+      {% if query %}
+      <p class="text-sm text-gray-600">Kết quả tìm kiếm cho "{{ query }}"</p>
+      {% endif %}
+    </div>
+    <form
+      method="get"
+      action=""
+      class="flex items-center gap-2 w-full md:w-auto"
+    >
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Tìm kiếm sản phẩm..."
+        class="w-full md:w-80 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE4D2D]"
+      />
+      <button
+        type="submit"
+        class="bg-[#EE4D2D] text-white px-4 py-2 rounded-lg hover:bg-[#d43c1f]"
+      >
+        Tìm
+      </button>
+    </form>
+  </div>
+
+  <div class="products">
+    {% for product in products %}
+    <div class="product">
+      <img src="{{ product.image }}" alt="{{ product.name }}" />
+      <h3>{{ product.name }}</h3>
+      <p class="price">{{ product.price|floatformat:0 }}₫</p>
+      <a href="{% url 'product_detail' product.id %}">Xem chi tiết</a>
+    </div>
+    {% empty %}
+    <div class="p-6 bg-white rounded-lg shadow">
+      <p>Không tìm thấy sản phẩm nào.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

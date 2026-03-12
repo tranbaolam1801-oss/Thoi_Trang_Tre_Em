@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block title %}Trang chủ - Shop{% endblock %} {%
+block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div
+    class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8"
+  >
+    <div>
+      <h1 class="text-3xl md:text-4xl font-bold">
+        Chào mừng đến với cửa hàng!
+      </h1>
+      <p class="text-gray-600 mt-2">
+        Khám phá sản phẩm mới nhất và mua sắm nhanh chóng.
+      </p>
+    </div>
+    <a
+      href="{% url 'products' %}"
+      class="inline-flex items-center gap-2 bg-[#EE4D2D] text-white px-6 py-3 rounded-lg shadow hover:bg-[#d43c1f]"
+    >
+      <i class="fas fa-list"></i>
+      Xem tất cả sản phẩm
+    </a>
+  </div>
+
+  <h2 class="text-2xl font-semibold mb-4">Sản phẩm nổi bật</h2>
+  <div class="products">
+    {% for product in products %}
+    <div class="product">
+      <img src="{{ product.image }}" alt="{{ product.name }}" />
+      <h3>{{ product.name }}</h3>
+      <p class="price">{{ product.price|floatformat:0 }}₫</p>
+      <a href="{% url 'product_detail' product.id %}">Xem chi tiết</a>
+    </div>
+    {% empty %}
+    <div class="p-6 bg-white rounded-lg shadow">
+      <p>Chưa có sản phẩm nào.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
